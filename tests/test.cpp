@@ -1,30 +1,26 @@
 #include <pigpio.h>
 #include <iostream>
+#include <chrono>
+#include <thread>
+using std::cout;
+
+void Switch(int gpioIdNumber, int milliseconds)
+{
+	while (true)
+	{
+		gpioWrite(gpioIdNumber, 1);
+		//std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
+		gpioWrite(gpioIdNumber, 0);
+		//std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
+	}
+}
 
 int main(int argc, char* argv[])
 {
 	if (gpioInitialise() >= 0)
 	{
-		//gpioSetMode(23, 1);
-		//gpioSetMode(12, 1);
-		while (1)
-		{        		
-			gpioWrite(23, 0);
-			gpioWrite(12, 1);
-			gpioWrite(18, 0);
-			std::cout << "RED";
-			getchar();
-			gpioWrite(23, 1);
-			gpioWrite(12, 0);
-			gpioWrite(18, 0);
-			std::cout<< "GREEN";
-			getchar();
-			gpioWrite(23, 0);
-			gpioWrite(12, 0);
-			gpioWrite(18, 1);
-			std::cout << "BLUE";
-			getchar();	
-		}
+		std::thread redThread(Switch, 12, 1000);
+		std::thread greenThread(Switch, 23, 750);
+		std::thread blueThread(Switch, 18, 500);
 	}
 }
-
