@@ -1,0 +1,1 @@
+g++ -o test_cpp test.cpp -lpigpio -lrt -lpthread
