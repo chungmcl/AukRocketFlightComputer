@@ -12,11 +12,15 @@ public:
     {
         writeLock = lock;
     }
-    void GpioWrapper::write(int gpioNumber, int milliseconds)
+    void write(int gpioNumber, int milliseconds)
     {
         writeLock->lock();
-        gpioWrite(gpioNumber, milliseconds);
-        writeLock->unlock();
+        if (gpioInitialise() >= 0)
+        {
+			gpioWrite(gpioNumber, milliseconds);
+		}
+		gpioTerminate();
+		writeLock->unlock();
     }
 private:
     std::mutex* writeLock;
@@ -28,7 +32,7 @@ void Switch(GpioWrapper* writer, int gpioIdNumber, int milliseconds)
 {
 	while (true)
 	{
-        (*writer).write(gpioIdNumber, millseconds);
+        writer->write(gpioIdNumber, milliseconds);
 	}
 }
 
@@ -38,10 +42,7 @@ int main(int argc, char* argv[])
     GpioWrapper redGpioWrapper(&lock);
     GpioWrapper blueGpioWrapper(&lock);
     GpioWrapper greenGpioWrapper(&lock);
-	if (gpioInitialise() >= 0)
-	{
-		std::thread redThread(Switch, &redGpioWrapper, 12, 1000);
-		std::thread greenThread(Switch, &blueGpioWrapper, 23, 750);
-		std::thread blueThread(Switch, &greenGpioWrapper, 18, 500);
-	}
+	std::thread redThread(Switch, &redGpioWrapper, 12, 1000);
+	std::thread greenThread(Switch, &blueGpioWrapper, 23, 750);
+	std::thread blueThread(Switch, &greenGpioWrapper, 18, 500);
 }
