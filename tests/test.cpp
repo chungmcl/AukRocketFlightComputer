@@ -1,5 +1,6 @@
 #include <pigpio.h>
 #include "bmp3.h"
+#include "bmp3.c"
 
 #include <iostream>
 #include <chrono>
@@ -7,30 +8,7 @@
 #include <mutex>
 using std::cout;
 
-int8_t set_normal_mode(struct bmp3_dev *dev)
-{
-    int8_t rslt;
-    /* Used to select the settings user needs to change */
-    uint16_t settings_sel;
-
-    /* Select the pressure and temperature sensor to be enabled */
-    dev->settings.press_en = BMP3_ENABLE;
-    dev->settings.temp_en = BMP3_ENABLE;
-    /* Select the output data rate and oversampling settings for pressure and temperature */
-    dev->settings.odr_filter.press_os = BMP3_NO_OVERSAMPLING;
-    dev->settings.odr_filter.temp_os = BMP3_NO_OVERSAMPLING;
-    dev->settings.odr_filter.odr = BMP3_ODR_200_HZ;
-    /* Assign the settings which needs to be set in the sensor */
-    settings_sel = BMP3_PRESS_EN_SEL | BMP3_TEMP_EN_SEL | BMP3_PRESS_OS_SEL | BMP3_TEMP_OS_SEL | BMP3_ODR_SEL;
-    rslt = bmp3_set_sensor_settings(settings_sel, dev);
-
-    /* Set the power mode to normal mode */
-    dev->settings.op_mode = BMP3_NORMAL_MODE;
-    rslt = bmp3_set_op_mode(dev);
-
-    return rslt;
-}
-
+// Code from BMP388 Driver READ.ME 
 int8_t get_sensor_data(struct bmp3_dev *dev)
 {
     int8_t rslt;
@@ -57,41 +35,46 @@ int8_t get_sensor_data(struct bmp3_dev *dev)
 }
 
 // The i2c handle
-unsigned pigpioHandle;
+static unsigned pigpioHandle;
 
 static int8_t i2c_read(uint8_t dev_id, uint8_t reg_addr, uint8_t *reg_data, uint16_t len) 
 {
-    return i2cReadByte(handle);
+    return (int8_t)i2cReadByteData(pigpioHandle, reg_addr);
 }
 
 static int8_t i2c_write(uint8_t dev_id, uint8_t reg_addr, uint8_t *reg_data, uint16_t len) 
 {
-    return i2cWriteByte(pigpioHandle, *reg_data;
+    return (int8_t)i2cWriteByteData(pigpioHandle, reg_addr, *reg_data);
 }
 
 static void delay_msec(uint32_t ms){
-    std::this_thread::sleep_for(std::chrono::millseconds(ms));
+	int signedMs = ms;
+    std::this_thread::sleep_for(std::chrono::milliseconds(signedMs));
 }
 
 
 int main(int argc, char* argv[])
 {
-    // i2cOpen(i2c bus 1, altimeter uses register 0x77, flags should be 0 according to pigpio docs)
-	pigpioHandle = i2cOpen(1, 0x77, 0);
+	// Initialise the pigpio library and ensure it is running
+	if (gpioInitialise() >= 0)
+	{
+		// i2cOpen(i2c bus 1, altimeter uses register 0x77, flags should be 0 according to pigpio docs)
+		pigpioHandle = i2cOpen(1, 0x77, 0);
 	
-	struct bmp3_dev dev;
-	int8_t rslt = BMP3_OK;
+		struct bmp3_dev dev;
+		int8_t rslt = BMP3_OK;
 
-	dev.dev_id = BMP3_I2C_ADDR_PRIM;
-	dev.intf = BMP3_I2C_INTF;
+		dev.dev_id = BMP3_I2C_ADDR_PRIM;
+		dev.intf = BMP3_I2C_INTF;
 	
-	// Connect 
-	dev.read = &i2c_read;
-	dev.write = &i2c_write;
-	dev.delay_ms = &delay_msec;
+		// Connect
+		dev.read = &i2c_read;
+		dev.write = &i2c_write;
+		dev.delay_ms = &delay_msec;
 
-	rslt = bmp3_init(&dev);
+		rslt = bmp3_init(&dev);
 
-	int setNormalModeResult = set_normal_mode(&dev);
-	get_sensor_data(&dev);
+		int setNormalModeResult = set_normal_mode(&dev);
+		get_sensor_data(&dev);
+	}
 }
