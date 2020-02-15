@@ -56,11 +56,28 @@ int8_t get_sensor_data(struct bmp3_dev *dev)
     return rslt;
 }
 
+// The i2c handle
+unsigned pigpioHandle;
+
+static int8_t i2c_read(uint8_t dev_id, uint8_t reg_addr, uint8_t *reg_data, uint16_t len) 
+{
+    return i2cReadByte(handle);
+}
+
+static int8_t i2c_write(uint8_t dev_id, uint8_t reg_addr, uint8_t *reg_data, uint16_t len) 
+{
+    return i2cWriteByte(pigpioHandle, *reg_data;
+}
+
+static void delay_msec(uint32_t ms){
+    std::this_thread::sleep_for(std::chrono::millseconds(ms));
+}
 
 
 int main(int argc, char* argv[])
 {
-	i2cOpen(1, );
+    // i2cOpen(i2c bus 1, altimeter uses register 0x77, flags should be 0 according to pigpio docs)
+	pigpioHandle = i2cOpen(1, 0x77, 0);
 	
 	struct bmp3_dev dev;
 	int8_t rslt = BMP3_OK;
@@ -69,9 +86,9 @@ int main(int argc, char* argv[])
 	dev.intf = BMP3_I2C_INTF;
 	
 	// Connect 
-	dev.read = user_i2c_read;
-	dev.write = user_i2c_write;
-	dev.delay_ms = user_delay_ms;
+	dev.read = &i2c_read;
+	dev.write = &i2c_write;
+	dev.delay_ms = &delay_msec;
 
 	rslt = bmp3_init(&dev);
 
