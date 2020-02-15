@@ -56,18 +56,25 @@ int8_t get_sensor_data(struct bmp3_dev *dev)
     return rslt;
 }
 
+
+
 int main(int argc, char* argv[])
 {
+	i2cOpen(1, );
+	
 	struct bmp3_dev dev;
 	int8_t rslt = BMP3_OK;
 
 	dev.dev_id = BMP3_I2C_ADDR_PRIM;
 	dev.intf = BMP3_I2C_INTF;
+	
+	// Connect 
 	dev.read = user_i2c_read;
 	dev.write = user_i2c_write;
 	dev.delay_ms = user_delay_ms;
 
 	rslt = bmp3_init(&dev);
 
-	int setNormalModeResult = set_normal_mode(dev);
+	int setNormalModeResult = set_normal_mode(&dev);
+	get_sensor_data(&dev);
 }
