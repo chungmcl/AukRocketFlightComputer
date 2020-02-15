@@ -64,15 +64,24 @@ static unsigned pigpioHandle;
 
 static int8_t i2c_read(uint8_t dev_id, uint8_t reg_addr, uint8_t *reg_data, uint16_t len) 
 {
+	//return i2cReadByteData(pigpioHandle, reg_addr);
      /* Read from registers using I2C. Return 0 for a successful execution. */
     uint16_t count = 0;
     int res;
-    while (count < length) {
-      res = i2cReadByteData(i2cHnd, (reg_addr + count));
-       if (res < 0) {
+    while (count < 0x32) 
+    {
+       res = i2cReadByteData(pigpioHandle, (reg_addr + count));
+       if (res < 0) 
+       {
            printf("*** ERROR in i2c_reg_read %d\n", res);
            return 1;
        }
+       else
+       {
+		   printf("%x", (uint8_t)(res & 0xff));
+		   printf("\t");
+		   printf("%x\n", reg_addr + count);
+	   }
     reg_data[count] = (uint8_t)(res & 0xff);
     count++;
    }
