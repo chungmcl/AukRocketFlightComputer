@@ -83,8 +83,8 @@ int main(int argc, char* argv[])
 	// Initialise the pigpio library and ensure it is running
 	if (gpioInitialise() >= 0)
 	{
-		// i2cOpen(i2c bus 1, altimeter uses register 0x77, flags should be 0 according to pigpio docs)
-		pigpioHandle = i2cOpen(1, 0x77, 0);
+		// i2cOpen(i2c bus 1, altimeter uses register BMP3_I2C_ADDR_SEC, flags should be 0 according to pigpio docs)
+		pigpioHandle = i2cOpen(1, BMP3_I2C_ADDR_SEC, 0);
 	
 		struct bmp3_dev dev;
 		int8_t rslt = BMP3_OK;
