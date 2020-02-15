@@ -65,27 +65,27 @@ static unsigned pigpioHandle;
 static int8_t i2c_read(uint8_t dev_id, uint8_t reg_addr, uint8_t *reg_data, uint16_t len) 
 {
 	//return i2cReadByteData(pigpioHandle, reg_addr);
-     /* Read from registers using I2C. Return 0 for a successful execution. */
+	/* Read from registers using I2C. Return 0 for a successful execution. */
     uint16_t count = 0;
     int res;
     while (count < 0x32) 
     {
-       res = i2cReadByteData(pigpioHandle, (reg_addr + count));
-       if (res < 0) 
+		res = i2cReadByteData(pigpioHandle, (reg_addr + count));
+		if (res < 0) 
        {
-           printf("*** ERROR in i2c_reg_read %d\n", res);
-           return 1;
-       }
-       else
-       {
-		   printf("%x", (uint8_t)(res & 0xff));
-		   printf("\t");
-		   printf("%x\n", reg_addr + count);
-	   }
-    reg_data[count] = (uint8_t)(res & 0xff);
-    count++;
+			printf("*** ERROR in i2c_reg_read %d\n", res);
+			return 1;
+		}
+		else
+		{
+			printf("%d", (uint8_t)(res & 0xff));
+			printf(" ");
+			printf("%d\n", reg_addr + count);
+		}
+		reg_data[count] = (uint8_t)(res & 0xff);
+		count++;
    }
-    return 1;
+   return i2cReadByteData(pigpioHandle, reg_addr);
 }
 
 static int8_t i2c_write(uint8_t dev_id, uint8_t reg_addr, uint8_t *reg_data, uint16_t len) 
@@ -117,9 +117,8 @@ int main(int argc, char* argv[])
 		dev.read = &i2c_read;
 		dev.write = &i2c_write;
 		dev.delay_ms = &delay_msec;
-
 		rslt = bmp3_init(&dev);
-
+		
 		int setNormalModeResult = setNormalMode(&dev);
 		get_sensor_data(&dev);
 	}
