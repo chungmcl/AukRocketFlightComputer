@@ -64,7 +64,7 @@ static unsigned pigpioHandle;
 
 static int8_t i2c_read(uint8_t dev_id, uint8_t reg_addr, uint8_t *reg_data, uint16_t len) 
 {
-	//return i2cReadByteData(pigpioHandle, reg_addr);
+	return i2cReadByteData(pigpioHandle, reg_addr); 
 	/* Read from registers using I2C. Return 0 for a successful execution. */
     uint16_t count = 0;
     int res;
@@ -93,9 +93,47 @@ static int8_t i2c_write(uint8_t dev_id, uint8_t reg_addr, uint8_t *reg_data, uin
     return (int8_t)i2cWriteByteData(pigpioHandle, reg_addr, *reg_data);
 }
 
-static void delay_msec(uint32_t ms){
+static void delay_msec(uint32_t ms)
+{
 	int signedMs = ms;
     std::this_thread::sleep_for(std::chrono::milliseconds(signedMs));
+}
+
+void Debug(int8_t rslt)
+{
+		switch (rslt)
+		{
+			case BMP3_OK:
+				printf("OK\n");
+				break;
+			case BMP3_E_NULL_PTR:
+				printf("NULL PTR\n");
+				break;
+			case BMP3_E_DEV_NOT_FOUND:
+				printf("DEV NOT FOUND\n");
+				break;
+			case BMP3_E_INVALID_ODR_OSR_SETTINGS:
+				printf("INVALID ODR OSR SETTINGS\n");
+				break;
+			case BMP3_E_CMD_EXEC_FAILED:
+				printf("CMD EXEC FAILED\n");
+				break;
+			case BMP3_E_CONFIGURATION_ERR:
+				printf("CONFIGURATION ERROR\n");
+				break;
+			case BMP3_E_INVALID_LEN:
+				printf("INVALID LENGTH\n");
+				break;
+			case BMP3_E_COMM_FAIL:
+				printf("COMM FAIL\n");
+				break;
+			case BMP3_E_FIFO_WATERMARK_NOT_REACHED:
+				printf("FIFO WATERMARK NOT REACHED\n");
+				break;
+			default:
+				printf("NO FAILURE CODE\n");
+				break;
+		}
 }
 
 
@@ -117,9 +155,19 @@ int main(int argc, char* argv[])
 		dev.read = &i2c_read;
 		dev.write = &i2c_write;
 		dev.delay_ms = &delay_msec;
-		rslt = bmp3_init(&dev);
 		
-		int setNormalModeResult = setNormalMode(&dev);
+		rslt = bmp3_init(&dev);
+		printf("Finished initialization of dev\n");
+		
+		Debug(rslt);
+
+		int8_t setNormalModeResult = setNormalMode(&dev);
+		printf("Finished setting normal mode\n");
+		
+		Debug(setNormalModeResult);
+		
 		get_sensor_data(&dev);
+		
+		i2cClose(pigpioHandle);
 	}
 }
