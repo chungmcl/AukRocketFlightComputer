@@ -158,12 +158,10 @@ int main(int argc, char* argv[])
 		
 		rslt = bmp3_init(&dev);
 		printf("Finished initialization of dev\n");
-		
 		Debug(rslt);
 
 		int8_t setNormalModeResult = setNormalMode(&dev);
 		printf("Finished setting normal mode\n");
-		
 		Debug(setNormalModeResult);
 		
 		get_sensor_data(&dev);
