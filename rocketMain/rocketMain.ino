@@ -1,12 +1,12 @@
 #include "Altimeter.h"
 
 // Pointer to singleton altimeter instance
-Altimeter* altimeter = Altimeter::GetInstance();
+Altimeter* altimeter;
 
 void setup() 
 {
-  // put your setup code here, to run once:
-  altimeter->SetupAltimeter();
+  // Get pointer to singleton instance of altimeter
+  altimeter = Altimeter::GetInstance();
 
   // Set charge activation pin outputs to OUTPUT mode
   pinMode(2, OUTPUT);

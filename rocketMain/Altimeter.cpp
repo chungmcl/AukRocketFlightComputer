@@ -6,11 +6,20 @@ Altimeter* Altimeter::instance = 0;
 Altimeter::Altimeter()
 {}
 
+// Destructor for deleting instance to prevent memory leaks
+Altimeter::~Altimeter()
+{
+  delete instance;
+}
+
 // Get singleton instance of Altimeter
 Altimeter* Altimeter::GetInstance()
 {
   if (instance == 0)
+  {
     instance = new Altimeter();
+    instance->SetupAltimeter();
+  }
 
   return instance;
 }

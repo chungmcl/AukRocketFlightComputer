@@ -26,13 +26,16 @@ public:
   bool isSetup;
 
   static Altimeter* GetInstance();
-  void SetupAltimeter();
+  ~Altimeter();
+  
   float GetPressureHpa();
   float GetAltitudeMeters(float seaLevelPressureHpa);
   float GetTemperatureCelsius();
   void AltimeterDebug();
 private:
   static Altimeter* instance;
-  Altimeter();
   Adafruit_BMP3XX theBmp;
+  
+  Altimeter();
+  void SetupAltimeter();
 };
