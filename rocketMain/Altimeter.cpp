@@ -1,5 +1,21 @@
 #include "Altimeter.h"
 
+Altimeter* Altimeter::instance = 0;
+
+// Empty constructor for singleton pattern
+Altimeter::Altimeter()
+{}
+
+// Get singleton instance of Altimeter
+Altimeter* Altimeter::GetInstance()
+{
+  if (instance == 0)
+    instance = new Altimeter();
+
+  return instance;
+}
+
+// Begin setup of Altimeter class
 void Altimeter::SetupAltimeter() 
 {
   Serial.begin(115200);
@@ -33,12 +49,14 @@ float Altimeter::GetAltitudeMeters(float seaLevelPressureHpa)
     return theBmp.readAltitude(SEALEVELPRESSURE_HPA);
 }
 
+// Get temperature in degrees Celsius
 float Altimeter::GetTemperatureCelsius()
 {
   if (isSetup)
     return theBmp.temperature;
 }
 
+// Debug method *REMOVE ON RELEASE*
 void Altimeter::AltimeterDebug() 
 {
   if (! theBmp.performReading()) 

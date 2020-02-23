@@ -1,13 +1,20 @@
 #include "Altimeter.h"
 
-Altimeter altimeter;
+// Pointer to singleton altimeter instance
+Altimeter* altimeter = Altimeter::GetInstance();
 
-void setup() {
+void setup() 
+{
   // put your setup code here, to run once:
-  altimeter.SetupAltimeter();
+  altimeter->SetupAltimeter();
+
+  // Set charge activation pin outputs to OUTPUT mode
+  pinMode(2, OUTPUT);
+  pinMode(3, OUTPUT);
+  pinMode(4, OUTPUT);
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
-  altimeter.AltimeterDebug();
+void loop() 
+{
+  altimeter->AltimeterDebug();
 }
