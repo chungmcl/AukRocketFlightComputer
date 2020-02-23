@@ -23,19 +23,19 @@
 class Altimeter
 {
 public:
-  bool isSetup;
+    bool isSetup;
 
-  static Altimeter* GetInstance();
-  ~Altimeter();
+    static Altimeter* GetInstance();
+    ~Altimeter();
   
-  float GetPressureHpa();
-  float GetAltitudeMeters(float seaLevelPressureHpa);
-  float GetTemperatureCelsius();
-  void AltimeterDebug();
+    float GetPressureHpa();
+    float GetAltitudeMeters(float seaLevelPressureHpa);
+    float GetTemperatureCelsius();
+    void AltimeterDebug();
 private:
-  static Altimeter* instance;
-  Adafruit_BMP3XX theBmp;
+    static Altimeter* instance;
+    Adafruit_BMP3XX theBmp;
   
-  Altimeter();
-  void SetupAltimeter();
+    Altimeter();
+    void SetupAltimeter();
 };
