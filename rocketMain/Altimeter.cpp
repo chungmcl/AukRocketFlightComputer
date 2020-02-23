@@ -58,7 +58,7 @@ float Altimeter::GetPressureHpa()
 float Altimeter::GetAltitudeMeters(float seaLevelPressureHpa)
 {
     if (isSetup)
-        return theBmp.readAltitude(SEALEVELPRESSURE_HPA);
+        return theBmp.readAltitude(seaLevelPressureHpa);
 }
 
 // Get temperature in degrees Celsius
