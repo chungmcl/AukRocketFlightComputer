@@ -1,0 +1,29 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "/Users/chungmcl/Library/Arduino15/packages/arduino/tools/**",
+                "/Users/chungmcl/Library/Arduino15/packages/arduino/hardware/avr/1.8.2/**",
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/dependencies/",
+                "${workspaceFolder}/dependencies/Adafruit_ADXL343/",
+                "${workspaceFolder}/dependencies/Adafruit_BMP3XX_Library/",
+                "${workspaceFolder}/dependencies/Adafruit_Unified_Sensor/",
+                "/Users/chungmcl/Library/Arduino15/**"
+            ],
+            "defines": [],
+            "macFrameworkPath": [
+                "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks"
+            ],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64",
+            "forcedInclude": [
+                "/Users/chungmcl/Library/Arduino15/packages/arduino/hardware/avr/1.8.2/cores/arduino/Arduino.h"
+            ]
+        }
+    ],
+    "version": 4
+}

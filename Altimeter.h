@@ -1,10 +1,13 @@
-// Library dependencies:
+#ifndef ALTIMETER_H
+#define ALTIMETER_H
+
+// Library dependencies (Can be found in the "dependencies" subfolder):
 // "Adafruit_ADXL343"
 // "Adafruit_BMP3XX_Library"
 // "Adafruit_Unified_Sensor"
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
-#include "Adafruit_BMP3XX.h"
+#include <Adafruit_BMP3XX.h>
 #include <Arduino.h> //needed for Serial.println
 #include <string.h>
 
@@ -13,7 +16,7 @@
 #define BMP_MOSI 11
 #define BMP_CS 10
 
-#define SEALEVELPRESSURE_HPA (1023.1)
+#define SEALEVELPRESSURE_HPA (1023.8)
 //Adafruit_BMP3XX theBmp(BMP_CS); // hardware SPI
 //Adafruit_BMP3XX theBmp(BMP_CS, BMP_MOSI, BMP_MISO,  BMP_SCK);
 
@@ -39,3 +42,5 @@ private:
     Altimeter();
     void SetupAltimeter();
 };
+
+#endif
