@@ -10,6 +10,7 @@
                 "${workspaceFolder}/dependencies/Adafruit_ADXL343/",
                 "${workspaceFolder}/dependencies/Adafruit_BMP3XX_Library/",
                 "${workspaceFolder}/dependencies/Adafruit_Unified_Sensor/",
+                "${workspaceFolder/dependencies/Adafruit_BNO055",
                 "/Users/chungmcl/Library/Arduino15/**"
             ],
             "defines": [],
