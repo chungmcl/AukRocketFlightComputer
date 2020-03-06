@@ -16,7 +16,6 @@ public:
 
     static Orientation* GetInstance();
     sensors_event_t GetEvent();
-    void OrientationDebug();
     ~Orientation();
 
 private:

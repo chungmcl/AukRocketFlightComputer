@@ -16,7 +16,6 @@
 #define BMP_MOSI 11
 #define BMP_CS 10
 
-#define GROUNDLEVELPRESSURE_HPA (1024.00)
 //Adafruit_BMP3XX theBmp(BMP_CS); // hardware SPI
 //Adafruit_BMP3XX theBmp(BMP_CS, BMP_MOSI, BMP_MISO,  BMP_SCK);
 
@@ -34,7 +33,6 @@ public:
     float GetPressureHpa();
     float GetAltitudeMeters(float groundLevelPressureHpa);
     float GetTemperatureCelsius();
-    void AltimeterDebug();
 private:
     static Altimeter* instance;
     Adafruit_BMP3XX theBmp;

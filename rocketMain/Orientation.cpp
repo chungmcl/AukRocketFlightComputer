@@ -28,11 +28,6 @@ Orientation* Orientation::GetInstance()
 void Orientation::SetupOrientation() 
 {
     theBno = Adafruit_BNO055(55);
-    
-    /* DEBUG - REMOVE ON RELEASE */
-    Serial.begin(9600);
-    Serial.println("Orientation Sensor Test"); Serial.println("");
-    /* END DEBUG */
   
     /* Initialise the sensor */
     if(!theBno.begin())
@@ -54,18 +49,4 @@ sensors_event_t Orientation::GetEvent()
     sensors_event_t event; 
     theBno.getEvent(&event);
     return event;
-}
-
-void Orientation::OrientationDebug()
-{
-      /* Get a new sensor event */
-    sensors_event_t event = GetEvent();
-    /* Display the floating point data */
-    Serial.print("X: ");
-    Serial.print(event.orientation.x, 4);
-    Serial.print("\tY: ");
-    Serial.print(event.orientation.y, 4);
-    Serial.print("\tZ: ");
-    Serial.print(event.orientation.z, 4);
-    Serial.println("");
 }
