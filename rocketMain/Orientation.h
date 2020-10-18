@@ -15,6 +15,13 @@ public:
     bool isSetup;
 
     static Orientation* GetInstance();
+
+    // In order to get data from a sensors_event_t,
+    // Simply use:
+    // sensors_event_t.orientation.x
+    // sensors_event_t.orientation.y
+    // sensors_evenet_t.orientation.z
+    // Data is in degrees.
     sensors_event_t GetEvent();
     ~Orientation();
 
@@ -25,6 +32,5 @@ private:
     Orientation();
     void SetupOrientation();
 };
-
 
 #endif

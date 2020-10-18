@@ -1,10 +1,11 @@
 #include "Altimeter.h"
 #include "Orientation.h"
+#include "Radio.h"
 #include "CircularBuffer.h"
 #include "rocketMain.h"
 
 #define GROUNDLEVELPRESSURE_HPA (1006.7)
-#define SENSOR_SAMPLE_RATE_MS (5000.00)
+#define SENSOR_SAMPLE_RATE_MS (1000.00)
 #define LAUNCH_DETECTION_ACCELERATION (14.30)
 
 void setup()
@@ -14,30 +15,24 @@ void setup()
     // Get pointer to singleton instance of Altimeter and Orientation
     altimeter = Altimeter::GetInstance();
     orientation = Orientation::GetInstance();
-
-    // Set charge activation pin outputs to OUTPUT mode
-    pinMode(2, OUTPUT);
-    pinMode(3, OUTPUT);
-    pinMode(4, OUTPUT);
-
+    radio = Radio::GetInstance();
+    
     Serial.begin(115200);
 }
 
 void loop() 
 {
     delay((int)SENSOR_SAMPLE_RATE_MS);
-    
     UpdateBuffers();
-    Serial.println(altitudeBuffer.first());
-    Serial.println(verticalVelocityBuffer.first());
-    Serial.println(verticalAccelerationBuffer.first());
-    Serial.println("\n\n");
-    if (DetectLaunch())
-    {
-        digitalWrite(4, HIGH);
-        delay(1000);
-        digitalWrite(4, LOW);
-    }
+    sensors_event_t orientationEventData = orientation->GetEvent();
+
+    float currentSensorData[4];
+    currentSensorData[0] = altitudeBuffer.first();
+    currentSensorData[1] = orientationEventData.orientation.x;
+    currentSensorData[2] = orientationEventData.orientation.y;
+    currentSensorData[3] = orientationEventData.orientation.z;
+    
+    radio->TransmitData(currentSensorData, sizeof(currentSensorData) / sizeof(*currentSensorData));
 }
 
 void UpdateBuffers()
@@ -57,7 +52,11 @@ void UpdateBuffers()
         verticalAccelerationBuffer.pop();
 
     if (verticalVelocityBuffer.size() >= 2)
-        verticalAccelerationBuffer.unshift((verticalVelocityBuffer[0] - verticalVelocityBuffer[1]) / (SENSOR_SAMPLE_RATE_MS / 1000.00));
+    {
+        verticalAccelerationBuffer.unshift(
+            (verticalVelocityBuffer[0] - verticalVelocityBuffer[1]) / (SENSOR_SAMPLE_RATE_MS / 1000.00)
+            );
+    }
 }
 
 bool DetectLaunch()

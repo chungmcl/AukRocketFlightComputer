@@ -36,9 +36,9 @@ public:
 private:
     static Altimeter* instance;
     Adafruit_BMP3XX theBmp;
-  
+
     Altimeter();
     void SetupAltimeter();
 };
-
+ 
 #endif
