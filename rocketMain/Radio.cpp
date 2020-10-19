@@ -81,6 +81,7 @@ void Radio::TransmitData(float* dataList, int dataListSize)
     }
   
     // Send the message
-    theRadio->send((uint8_t *)radioPacket, radioPacketLength);
+    theRadio->send((uint8_t*)radioPacket, radioPacketLength);
     theRadio->waitPacketSent();
+    Serial.println("Sent data");
 }
