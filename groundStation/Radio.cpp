@@ -63,7 +63,7 @@ void Radio::SetupRadio()
 // [0] = altitude, [1] = orientation.x, [2] = orientation.y, [3] = orientation.z
 #define EXPECTED_FLOAT_COUNT 4
 #define FLOAT_BYTE_SIZE 4
-void Radio::Receive(float* returnData) 
+bool Radio::Receive(float* returnData) 
 {
     if (theRadio->available()) 
     {
@@ -75,7 +75,7 @@ void Radio::Receive(float* returnData)
         // len is updated to be true length of buf in .recv()
         if (theRadio->recv(buf, &len)) 
         {
-            if (!len) { return; }
+            if (!len) { return false; }
             //Serial.println("Data: Altitude, Orientation.X, Orientation.Y, Orientation.Z");
             
             if (len == EXPECTED_FLOAT_COUNT * FLOAT_BYTE_SIZE)
@@ -94,9 +94,10 @@ void Radio::Receive(float* returnData)
                     // Load the return buffer with f
                     *(returnData + (i / FLOAT_BYTE_SIZE)) = f;
                 }
-                return;
+                return true;
             }
-            else {
+            else 
+            {
                 Serial.println("UNEXPECTED BUFFER LENGTH");
             }
         } 
@@ -105,4 +106,5 @@ void Radio::Receive(float* returnData)
             Serial.println("Receive failed");
         }
     }
+    return false;
 }

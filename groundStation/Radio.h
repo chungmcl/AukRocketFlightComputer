@@ -15,13 +15,13 @@
 class Radio
 {
 public:
-    bool isSetup;
-
+    // Get pointer to singleton instance of Radio
     static Radio* GetInstance();
 
     // Expect EXPECTED_FLOAT_COUNT floats that contain this data:
     // [0] = altitude, [1] = orientation.x, [2] = orientation.y, [3] = orientation.z
-    void Receive(float* returnData);
+    // Returns true if new data was received and placed in *returnData; false if not
+    bool Receive(float* returnData);
     ~Radio();
 
 private:

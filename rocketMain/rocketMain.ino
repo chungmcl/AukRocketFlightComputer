@@ -10,8 +10,6 @@
 
 void setup()
 {
-    // delay(Time before systems are activated for safety and power saving);
-
     // Get pointer to singleton instance of Altimeter and Orientation
     altimeter = Altimeter::GetInstance();
     orientation = Orientation::GetInstance();

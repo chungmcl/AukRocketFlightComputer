@@ -76,7 +76,7 @@ void Radio::TransmitData(float* dataList, int dataListSize)
         uint8_t* current = reinterpret_cast<uint8_t*>(dataList + i);
         for (int j = 0; j < FLOAT_BYTE_COUNT; j++) 
         {
-            radioPacket[(i * 4) + j] = *(current + j);
+            radioPacket[(i * FLOAT_BYTE_COUNT) + j] = *(current + j);
         }
     }
   
